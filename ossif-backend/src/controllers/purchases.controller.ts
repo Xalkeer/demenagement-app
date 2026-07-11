@@ -21,21 +21,25 @@ const checkAndSendEmail = async (purchase: any) => {
   logMsg(`[EMAIL DEBUG] Mois restants calculés : ${monthsRemaining}`);
   
   if (monthsRemaining <= 0) {
-    logMsg(`[EMAIL DEBUG] ✅ L'achat est terminé (monthsRemaining <= 0). Tentative d'envoi du mail...`);
+    logMsg(`[EMAIL DEBUG] ✅ L'achat est terminé (monthsRemaining <= 0). Déclenchement de l'envoi du mail en arrière-plan...`);
     const emailTo = process.env.SMTP_TO_EMAILS || process.env.SMTP_EMAIL || '';
     logMsg(`[EMAIL DEBUG] Destinataire(s) du mail : ${emailTo}`);
     
-    try {
-      await sendEmail(
-        emailTo,
-        `🎉 Achat terminé : ${purchase.name}`,
-        `Bonne nouvelle !\n\nL'achat "${purchase.name}" est arrivé à son terme de paiement.`
-      );
-      logMsg(`[EMAIL DEBUG] ✅ Mail envoyé avec succès ! Mise à jour de termEmailSent en base...`);
-      return await purchasesService.markPurchaseTermEmailSent(purchase.id);
-    } catch (err) {
-      logMsg(`[EMAIL DEBUG] 🚨 ERREUR CRITIQUE lors de l'envoi de l'email pour "${purchase.name}": ${err}`);
-    }
+    // Marquer l'email comme envoyé en base immédiatement pour éviter les doublons
+    const updatedPurchase = await purchasesService.markPurchaseTermEmailSent(purchase.id);
+    
+    // Envoyer l'email de manière asynchrone (sans bloquer la réponse HTTP)
+    sendEmail(
+      emailTo,
+      `🎉 Achat terminé : ${purchase.name}`,
+      `Bonne nouvelle !\n\nL'achat "${purchase.name}" est arrivé à son terme de paiement.`
+    ).then(() => {
+      logMsg(`[EMAIL DEBUG] ✅ Mail envoyé avec succès pour "${purchase.name}" !`);
+    }).catch((err) => {
+      logMsg(`[EMAIL DEBUG] 🚨 ERREUR lors de l'envoi de l'email pour "${purchase.name}": ${err}`);
+    });
+    
+    return updatedPurchase;
   } else {
     logMsg(`[EMAIL DEBUG] ❌ L'achat n'est pas encore terminé (il reste ${monthsRemaining} mois).`);
   }
