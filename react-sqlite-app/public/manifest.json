@@ -1,0 +1,16 @@
+{
+  "name": "Achats App",
+  "short_name": "Achats",
+  "description": "Application de gestion des achats et événements",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#181615",
+  "theme_color": "#ea580c",
+  "icons": [
+    {
+      "src": "/globe.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
