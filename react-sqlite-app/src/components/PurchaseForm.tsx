@@ -40,9 +40,9 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
   };
 
   return (
-    <section className="bg-[#23201f] border border-orange-900/20 rounded-3xl p-4 sm:p-6 shadow-xl shrink-0">
-      <h2 className="text-xl font-semibold mb-6">Nouvel Achat</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <section className="w-full max-w-full bg-[#23201f] border border-orange-900/20 rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-xl shrink-0 overflow-hidden">
+      <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Nouvel Achat</h2>
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div className="space-y-1.5">
           <label className="text-sm text-stone-400">Nom de l'achat</label>
           <input
@@ -50,7 +50,7 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-[#181615] border border-orange-900/20 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
+            className="w-full min-w-0 max-w-full bg-[#181615] border border-orange-900/20 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
             placeholder="Ex: Bureau Pierre"
           />
         </div>
@@ -60,7 +60,7 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full bg-[#181615] border border-orange-900/20 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
+            className="w-full min-w-0 max-w-full bg-[#181615] border border-orange-900/20 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
           >
             {DEFAULT_CATEGORIES.map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
@@ -72,7 +72,7 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
               required
               value={customCategory}
               onChange={(e) => setCustomCategory(e.target.value)}
-              className="w-full bg-[#181615] border border-orange-900/20 rounded-lg px-4 py-2.5 mt-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
+              className="w-full min-w-0 bg-[#181615] border border-orange-900/20 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 mt-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
               placeholder="Précisez la catégorie..."
             />
           )}
@@ -86,7 +86,7 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
             required
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full bg-[#181615] border border-orange-900/20 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
+            className="w-full min-w-0 max-w-full bg-[#181615] border border-orange-900/20 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
             placeholder="Ex: 1200"
           />
         </div>
@@ -97,7 +97,7 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full bg-[#181615] border border-orange-900/20 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow text-stone-200 [color-scheme:dark]"
+            className="w-full min-w-0 max-w-full bg-[#181615] border border-orange-900/20 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow text-stone-200 [color-scheme:dark]"
           />
         </div>
 
@@ -107,7 +107,7 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
             type="date"
             value={reimbursementStartDate}
             onChange={(e) => setReimbursementStartDate(e.target.value)}
-            className="w-full bg-[#181615] border border-orange-900/20 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow text-stone-200 [color-scheme:dark]"
+            className="w-full min-w-0 max-w-full bg-[#181615] border border-orange-900/20 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow text-stone-200 [color-scheme:dark]"
           />
         </div>
 
@@ -119,7 +119,7 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
             required
             value={monthsToPay}
             onChange={(e) => setMonthsToPay(e.target.value)}
-            className="w-full bg-[#181615] border border-orange-900/20 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
+            className="w-full min-w-0 max-w-full bg-[#181615] border border-orange-900/20 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
             placeholder="Ex: 12"
           />
         </div>
@@ -130,7 +130,7 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
             type="url"
             value={link}
             onChange={(e) => setLink(e.target.value)}
-            className="w-full bg-[#181615] border border-orange-900/20 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
+            className="w-full min-w-0 max-w-full bg-[#181615] border border-orange-900/20 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow"
             placeholder="https://..."
           />
         </div>
@@ -141,7 +141,7 @@ export const PurchaseForm = ({ onAdd }: { onAdd: (p: Partial<Purchase>) => Promi
             type="date"
             value={expectedReceptionDate}
             onChange={(e) => setExpectedReceptionDate(e.target.value)}
-            className="w-full bg-[#181615] border border-orange-900/20 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow text-stone-200 [color-scheme:dark]"
+            className="w-full min-w-0 max-w-full bg-[#181615] border border-orange-900/20 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-orange-500 transition-shadow text-stone-200 [color-scheme:dark]"
           />
         </div>
 

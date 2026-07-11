@@ -47,10 +47,10 @@ export function TaskModal({ task, isOpen, onClose, onSave, lists }: TaskModalPro
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-      <div className="bg-[#23201f] border border-stone-800 rounded-3xl p-6 shadow-2xl w-full max-w-lg">
-        <h2 className="text-xl font-bold mb-4">Modifier la tâche</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-2 sm:p-4 z-[60]">
+      <div className="bg-[#23201f] border border-stone-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto no-scrollbar">
+        <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Modifier la tâche</h2>
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <div>
             <label className="block text-sm text-stone-400 mb-1">Titre</label>
             <input
@@ -58,7 +58,7 @@ export function TaskModal({ task, isOpen, onClose, onSave, lists }: TaskModalPro
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-[#181615] border border-stone-800 rounded-xl px-4 py-2 outline-none focus:border-orange-500/50"
+              className="w-full bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 outline-none focus:border-orange-500/50"
             />
           </div>
           
@@ -69,7 +69,7 @@ export function TaskModal({ task, isOpen, onClose, onSave, lists }: TaskModalPro
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-[#181615] border border-stone-800 rounded-xl px-4 py-2 outline-none focus:border-orange-500/50 [color-scheme:dark]"
+                className="w-full bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 outline-none focus:border-orange-500/50 [color-scheme:dark]"
               />
             </div>
             <div>
@@ -77,7 +77,7 @@ export function TaskModal({ task, isOpen, onClose, onSave, lists }: TaskModalPro
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as 'normal' | 'urgent' | 'super-urgent')}
-                className="w-full bg-[#181615] border border-stone-800 rounded-xl px-4 py-2 outline-none focus:border-orange-500/50"
+                className="w-full bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 outline-none focus:border-orange-500/50"
               >
                 <option value="normal">Normale</option>
                 <option value="urgent">Urgente</option>
@@ -92,7 +92,7 @@ export function TaskModal({ task, isOpen, onClose, onSave, lists }: TaskModalPro
               <select
                 value={listId}
                 onChange={(e) => setListId(e.target.value === "none" ? "none" : parseInt(e.target.value))}
-                className="w-full bg-[#181615] border border-stone-800 rounded-xl px-4 py-2 outline-none focus:border-orange-500/50"
+                className="w-full bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 outline-none focus:border-orange-500/50"
               >
                 <option value="none">Aucune liste</option>
                 {lists.map(l => (
@@ -105,7 +105,7 @@ export function TaskModal({ task, isOpen, onClose, onSave, lists }: TaskModalPro
               <select
                 value={assignee}
                 onChange={(e) => setAssignee(e.target.value)}
-                className="w-full bg-[#181615] border border-stone-800 rounded-xl px-4 py-2 outline-none focus:border-orange-500/50"
+                className="w-full bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 outline-none focus:border-orange-500/50"
               >
                 <option value="none">Non assigné</option>
                 <option value="Pierre">Pierre</option>
@@ -121,7 +121,7 @@ export function TaskModal({ task, isOpen, onClose, onSave, lists }: TaskModalPro
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="Ex: Supermarché, Bureau..."
-              className="w-full bg-[#181615] border border-stone-800 rounded-xl px-4 py-2 outline-none focus:border-orange-500/50"
+              className="w-full bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 outline-none focus:border-orange-500/50"
             />
           </div>
 
@@ -132,7 +132,7 @@ export function TaskModal({ task, isOpen, onClose, onSave, lists }: TaskModalPro
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               placeholder="Détails supplémentaires..."
-              className="w-full bg-[#181615] border border-stone-800 rounded-xl px-4 py-2 outline-none focus:border-orange-500/50 resize-none"
+              className="w-full bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 outline-none focus:border-orange-500/50 resize-none"
             />
           </div>
 
@@ -140,13 +140,13 @@ export function TaskModal({ task, isOpen, onClose, onSave, lists }: TaskModalPro
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-stone-400 hover:bg-stone-800 transition-colors"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-stone-400 hover:bg-stone-800 transition-colors"
             >
               Annuler
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-medium transition-colors"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-medium transition-colors"
             >
               Enregistrer
             </button>

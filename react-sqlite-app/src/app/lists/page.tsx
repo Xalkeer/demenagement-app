@@ -73,15 +73,15 @@ export default function ListsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#181615] text-stone-100 p-3 sm:p-6 lg:p-12 font-[family-name:var(--font-geist-sans)]">
-      <div className="max-w-[1600px] w-full mx-auto space-y-6 md:space-y-12">
+    <main className="min-h-screen bg-[#181615] text-stone-100 p-2 sm:p-6 lg:p-12 font-[family-name:var(--font-geist-sans)]">
+      <div className="max-w-[1600px] w-full mx-auto space-y-4 sm:space-y-6 md:space-y-12">
         <Navigation />
         
-        <header className="text-center space-y-5">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">
+        <header className="text-center space-y-3 sm:space-y-5">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">
             Mes Listes
           </h1>
-          <p className="text-stone-400 text-lg">
+          <p className="text-stone-400 text-base sm:text-lg">
             Organisez vos tâches et événements par catégorie.
           </p>
         </header>
@@ -89,16 +89,16 @@ export default function ListsPage() {
         {loadingLists || loadingTasks ? (
           <div className="text-stone-500 text-center py-12">Chargement de vos listes...</div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
             
             {/* Colonne gauche : Les listes */}
             <div className="lg:col-span-1 space-y-4">
-              <div className="bg-[#23201f] border border-stone-800 rounded-3xl p-4 shadow-xl">
-                <h2 className="text-lg font-bold mb-4 px-2">Vos Listes</h2>
+              <div className="bg-[#23201f] border border-stone-800 rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl">
+                <h2 className="text-base sm:text-lg font-bold mb-3 sm:mb-4 px-2">Vos Listes</h2>
                 <div className="space-y-2">
                   <button
                     onClick={() => { setSelectedListId(null); setNewTaskTargetList("none"); }}
-                    className={`w-full text-left px-4 py-3 rounded-2xl flex items-center justify-between transition-all ${
+                    className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl flex items-center justify-between transition-all ${
                       selectedListId === null 
                         ? "bg-stone-800 ring-1 ring-orange-500/50" 
                         : "hover:bg-stone-800/50"
@@ -112,7 +112,7 @@ export default function ListsPage() {
 
                   <button
                     onClick={() => { setSelectedListId("today"); setNewTaskTargetList("none"); }}
-                    className={`w-full text-left px-4 py-3 rounded-2xl flex items-center justify-between transition-all ${
+                    className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl flex items-center justify-between transition-all ${
                       selectedListId === "today" 
                         ? "bg-stone-800 ring-1 ring-orange-500/50" 
                         : "hover:bg-stone-800/50"
@@ -127,7 +127,7 @@ export default function ListsPage() {
                     <button
                       key={list.id}
                       onClick={() => { setSelectedListId(list.id); setNewTaskTargetList(list.id); }}
-                      className={`w-full text-left px-4 py-3 rounded-2xl flex items-center justify-between transition-all ${
+                      className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl flex items-center justify-between transition-all ${
                         selectedListId === list.id 
                           ? "bg-stone-800 ring-1 ring-orange-500/50" 
                           : "hover:bg-stone-800/50"
@@ -155,7 +155,7 @@ export default function ListsPage() {
                     placeholder="+ Nouvelle liste"
                     value={newListName}
                     onChange={e => setNewListName(e.target.value)}
-                    className="w-full bg-[#181615] border border-stone-800 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all placeholder:text-stone-600"
+                    className="w-full bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all placeholder:text-stone-600"
                   />
                 </form>
               </div>
@@ -165,26 +165,26 @@ export default function ListsPage() {
             <div className="lg:col-span-3 space-y-6">
               
               {/* Box de création globale de tâche */}
-              <div className="bg-[#23201f] border border-stone-800 rounded-3xl p-6 shadow-xl">
-                <h3 className="text-lg font-bold mb-4">Créer une nouvelle tâche</h3>
+              <div className="bg-[#23201f] border border-stone-800 rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-xl">
+                <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Créer une nouvelle tâche</h3>
                 <form onSubmit={handleCreateTask} className="flex flex-wrap gap-3">
                   <input
                     type="text"
                     placeholder="Titre de la tâche..."
                     value={newTaskTitle}
                     onChange={e => setNewTaskTitle(e.target.value)}
-                    className="flex-1 min-w-[200px] bg-[#181615] border border-stone-800 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all"
+                    className="flex-1 min-w-[200px] bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all"
                   />
                   <input
                     type="date"
                     value={newTaskDate}
                     onChange={e => setNewTaskDate(e.target.value)}
-                    className="bg-[#181615] border border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-300 outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all [color-scheme:dark]"
+                    className="bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm text-stone-300 outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all [color-scheme:dark]"
                   />
                   <select
                     value={newTaskTargetList}
                     onChange={e => setNewTaskTargetList(e.target.value === "none" ? "none" : parseInt(e.target.value, 10))}
-                    className="bg-[#181615] border border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-300 outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all cursor-pointer"
+                    className="bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm text-stone-300 outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all cursor-pointer"
                   >
                     <option value="none">Général (Sans liste)</option>
                     {lists.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
@@ -192,7 +192,7 @@ export default function ListsPage() {
                   <select
                     value={newTaskPriority}
                     onChange={e => setNewTaskPriority(e.target.value as any)}
-                    className="bg-[#181615] border border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-300 outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all cursor-pointer"
+                    className="bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm text-stone-300 outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all cursor-pointer"
                   >
                     <option value="normal">Normal</option>
                     <option value="urgent">Urgent</option>
@@ -201,7 +201,7 @@ export default function ListsPage() {
                   <button 
                     type="submit"
                     disabled={!newTaskTitle.trim() || !newTaskDate}
-                    className="bg-orange-600 hover:bg-orange-500 disabled:opacity-50 disabled:hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+                    className="bg-orange-600 hover:bg-orange-500 disabled:opacity-50 disabled:hover:bg-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium transition-colors"
                   >
                     Ajouter
                   </button>
@@ -209,22 +209,22 @@ export default function ListsPage() {
               </div>
 
               {/* Box d'affichage de la liste sélectionnée */}
-              <div className="bg-[#23201f] border border-stone-800 rounded-3xl p-6 shadow-xl min-h-[400px] flex flex-col">
-                <div className="flex items-center gap-4 mb-6 pb-4 border-b border-stone-800">
+              <div className="bg-[#23201f] border border-stone-800 rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-xl min-h-[400px] flex flex-col">
+                <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-stone-800">
                   {selectedListId === "today" ? (
                     <>
                       <span className="w-4 h-4 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]"></span>
-                      <h2 className="text-2xl font-bold">Aujourd'hui</h2>
+                      <h2 className="text-xl sm:text-2xl font-bold">Aujourd'hui</h2>
                     </>
                   ) : selectedListId === null ? (
                     <>
                       <span className="w-4 h-4 rounded-full bg-stone-500"></span>
-                      <h2 className="text-2xl font-bold">Général (Sans liste)</h2>
+                      <h2 className="text-xl sm:text-2xl font-bold">Général (Sans liste)</h2>
                     </>
                   ) : (
                     <>
                       <span className={`w-4 h-4 rounded-full ${getColorClass(selectedList?.color || 'stone').split(' ')[0]}`}></span>
-                      <h2 className="text-2xl font-bold">{selectedList?.name}</h2>
+                      <h2 className="text-xl sm:text-2xl font-bold">{selectedList?.name}</h2>
                     </>
                   )}
                 </div>
@@ -238,7 +238,7 @@ export default function ListsPage() {
                     listTasks.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).map(task => (
                       <div 
                         key={task.id}
-                        className={`flex items-center gap-4 p-4 rounded-xl border transition-colors ${
+                        className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg sm:rounded-xl border transition-colors ${
                           task.isCompleted 
                             ? 'bg-stone-800/30 border-stone-800 text-stone-500' 
                             : `bg-[#181615] ${selectedListId === null ? 'border-stone-700/50' : getColorClass(selectedList?.color || 'stone').split(' ')[2]} text-stone-200 hover:bg-stone-800/50`

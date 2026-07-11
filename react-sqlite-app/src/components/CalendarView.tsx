@@ -9,9 +9,10 @@ type CalendarProps = {
   onAddTask: (task: Partial<Task>) => Promise<void>;
   onToggleTask: (task: Task) => Promise<void>;
   onDeleteTask: (id: number) => Promise<void>;
+  onEditTask?: (task: Task) => void;
 };
 
-export const CalendarView = ({ purchases, tasks, lists = [], onAddTask, onToggleTask, onDeleteTask }: CalendarProps) => {
+export const CalendarView = ({ purchases, tasks, lists = [], onAddTask, onToggleTask, onDeleteTask, onEditTask }: CalendarProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [addingTaskDate, setAddingTaskDate] = useState<number | null>(null);
   const [newTaskTitle, setNewTaskTitle] = useState("");
@@ -180,54 +181,76 @@ export const CalendarView = ({ purchases, tasks, lists = [], onAddTask, onToggle
                 </button>
               </div>
               
-              <div className="space-y-1.5 flex flex-col items-start w-full flex-1">
-                {events.map((evt, idx) => (
-                  <div key={`evt-${idx}`} className={`w-full text-left px-2 py-1 rounded text-[10px] font-medium border truncate ${getEventStyle(evt.type)}`} title={`${getEventLabel(evt.type)} : ${evt.purchase.name}`}>
-                    <span className="font-bold opacity-75 mr-1">{getEventLabel(evt.type)}</span>
-                    {evt.purchase.name}
-                  </div>
-                ))}
-
-                {dayTasks.map(t => {
-                  const listStyle = getListColorStyle(t.listId);
-                  return (
-                    <div key={`task-${t.id}`} className={`w-full flex items-start gap-1.5 px-2 py-1 rounded text-[10px] font-medium border ${t.isCompleted ? 'bg-stone-800/30 text-stone-500 line-through border-stone-800' : `bg-stone-800/60 ${listStyle}`}`}>
-                      <input 
-                        type="checkbox" 
-                        checked={t.isCompleted} 
-                        onClick={(e) => e.stopPropagation()}
-                        onChange={() => onToggleTask(t)}
-                        className="mt-0.5 w-3 h-3 rounded-sm border-stone-600 text-orange-500 focus:ring-orange-500 bg-[#181615] cursor-pointer"
-                      />
-                      <div className="flex-1 min-w-0 flex flex-col items-start">
-                        <span className="truncate w-full" title={t.title}>{t.title}</span>
-                        {t.priority === 'urgent' && <span className="text-[8px] bg-orange-900/50 text-orange-400 px-1 rounded uppercase mt-0.5 font-bold">Urgent</span>}
-                        {t.priority === 'super-urgent' && <span className="text-[8px] bg-rose-900/50 text-rose-400 px-1 rounded uppercase mt-0.5 font-bold">Super Urgent</span>}
-                      </div>
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); onDeleteTask(t.id); }} 
-                        className="opacity-0 group-hover:opacity-100 text-stone-500 hover:text-rose-400"
-                      >
-                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                      </button>
+              <div className="flex-1 flex flex-col w-full">
+                {/* --- MOBILE VIEW: Simple badges --- */}
+                <div className="sm:hidden flex flex-col gap-1 w-full mt-1">
+                  {events.length > 0 && (
+                    <div className="text-[9px] bg-orange-900/40 text-orange-400 px-1.5 py-0.5 rounded w-fit border border-orange-900/50 font-medium">
+                      {events.length} evt{events.length > 1 ? 's' : ''}
                     </div>
-                  );
-                })}
+                  )}
+                  {dayTasks.length > 0 && (
+                    <div className="text-[9px] bg-stone-800/60 text-stone-300 px-1.5 py-0.5 rounded w-fit border border-stone-700/50 font-medium flex items-center gap-1">
+                      <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      {dayTasks.length} tâche{dayTasks.length > 1 ? 's' : ''}
+                    </div>
+                  )}
+                </div>
 
-                {isAdding && (
-                  <div className="w-full mt-1" onClick={(e) => e.stopPropagation()}>
-                    <input 
-                      type="text" 
-                      autoFocus
-                      value={newTaskTitle}
-                      onChange={(e) => setNewTaskTitle(e.target.value)}
-                      onKeyDown={(e) => { if(e.key === 'Enter') handleAddTask(day); if(e.key === 'Escape') setAddingTaskDate(null); }}
-                      onBlur={() => handleAddTask(day)}
-                      placeholder="Nouvelle tâche..."
-                      className="w-full text-[10px] bg-[#181615] border border-orange-500/50 rounded px-2 py-1 text-stone-200 outline-none focus:ring-1 focus:ring-orange-500"
-                    />
-                  </div>
-                )}
+                {/* --- DESKTOP VIEW: Detailed lists --- */}
+                <div className="hidden sm:flex space-y-1.5 flex-col items-start w-full">
+                  {events.map((evt, idx) => (
+                    <div key={`evt-${idx}`} className={`w-full text-left px-2 py-1 rounded text-[10px] font-medium border truncate ${getEventStyle(evt.type)}`} title={`${getEventLabel(evt.type)} : ${evt.purchase.name}`}>
+                      <span className="font-bold opacity-75 mr-1">{getEventLabel(evt.type)}</span>
+                      {evt.purchase.name}
+                    </div>
+                  ))}
+
+                  {dayTasks.map(t => {
+                    const listStyle = getListColorStyle(t.listId);
+                    return (
+                      <div 
+                        key={`task-${t.id}`} 
+                        onClick={(e) => { e.stopPropagation(); onEditTask?.(t); }}
+                        className={`w-full flex items-start gap-1.5 px-2 py-1 rounded text-[10px] font-medium border cursor-pointer transition-colors hover:border-orange-500/50 ${t.isCompleted ? 'bg-stone-800/30 text-stone-500 line-through border-stone-800' : `bg-stone-800/60 border-transparent ${listStyle}`}`}
+                      >
+                        <input 
+                          type="checkbox" 
+                          checked={t.isCompleted} 
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={() => onToggleTask(t)}
+                          className="mt-0.5 w-3 h-3 rounded-sm border-stone-600 text-orange-500 focus:ring-orange-500 bg-[#181615] cursor-pointer"
+                        />
+                        <div className="flex-1 min-w-0 flex flex-col items-start">
+                          <span className="truncate w-full" title={t.title}>{t.title}</span>
+                          {t.priority === 'urgent' && <span className="text-[8px] bg-orange-900/50 text-orange-400 px-1 rounded uppercase mt-0.5 font-bold">Urgent</span>}
+                          {t.priority === 'super-urgent' && <span className="text-[8px] bg-rose-900/50 text-rose-400 px-1 rounded uppercase mt-0.5 font-bold">Super Urgent</span>}
+                        </div>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); onDeleteTask(t.id); }} 
+                          className="opacity-0 group-hover:opacity-100 text-stone-500 hover:text-rose-400"
+                        >
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                      </div>
+                    );
+                  })}
+
+                  {isAdding && (
+                    <div className="w-full mt-1" onClick={(e) => e.stopPropagation()}>
+                      <input 
+                        type="text" 
+                        autoFocus
+                        value={newTaskTitle}
+                        onChange={(e) => setNewTaskTitle(e.target.value)}
+                        onKeyDown={(e) => { if(e.key === 'Enter') handleAddTask(day); if(e.key === 'Escape') setAddingTaskDate(null); }}
+                        onBlur={() => handleAddTask(day)}
+                        placeholder="Nouvelle tâche..."
+                        className="w-full text-[10px] bg-[#181615] border border-orange-500/50 rounded px-2 py-1 text-stone-200 outline-none focus:ring-1 focus:ring-orange-500"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           );
@@ -286,7 +309,11 @@ export const CalendarView = ({ purchases, tasks, lists = [], onAddTask, onToggle
                         {dayTasks.map(t => {
                           const listStyle = getListColorStyle(t.listId);
                           return (
-                            <div key={t.id} className={`w-full flex items-center gap-3 px-3 py-2 rounded text-sm font-medium border ${t.isCompleted ? 'bg-stone-800/30 text-stone-500 line-through border-stone-800' : `bg-stone-800/60 ${listStyle}`}`}>
+                            <div 
+                              key={t.id} 
+                              onClick={(e) => { e.stopPropagation(); onEditTask?.(t); }}
+                              className={`w-full flex items-center gap-3 px-3 py-2 rounded text-sm font-medium border cursor-pointer transition-colors hover:border-orange-500/50 ${t.isCompleted ? 'bg-stone-800/30 text-stone-500 line-through border-stone-800' : `bg-stone-800/60 border-transparent ${listStyle}`}`}
+                            >
                               <input 
                                 type="checkbox" 
                                 checked={t.isCompleted} 

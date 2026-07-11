@@ -58,20 +58,20 @@ export default function Home() {
   );
 
   return (
-    <main className="min-h-screen bg-[#181615] text-stone-100 p-3 sm:p-6 lg:p-12 font-[family-name:var(--font-geist-sans)]">
-      <div className="max-w-[1600px] w-full mx-auto space-y-6 md:space-y-12">
+    <main className="min-h-screen bg-[#181615] text-stone-100 p-2 sm:p-6 lg:p-12 font-[family-name:var(--font-geist-sans)]">
+      <div className="max-w-[1600px] w-full mx-auto space-y-4 sm:space-y-6 md:space-y-12">
         <Navigation />
         <Header onExport={exportPurchases} onImport={importPurchases} />
 
         <GlobalStats purchases={purchases} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 items-start">
-          <div className="lg:col-span-4 md:col-span-1 space-y-6 min-w-0">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-12 items-start">
+          <div className="lg:col-span-4 md:col-span-1 space-y-4 sm:space-y-6 min-w-0">
             <PurchaseForm onAdd={addPurchase} />
             <CategorySummary purchases={purchases} />
           </div>
 
-          <section className="lg:col-span-8 md:col-span-2 space-y-8 md:space-y-12 min-w-0">
+          <section className="lg:col-span-8 md:col-span-2 space-y-6 sm:space-y-8 md:space-y-12 min-w-0">
             {/* SEARCH BAR */}
             <div className="bg-[#23201f] border border-orange-900/20 rounded-2xl p-2 md:p-3 shadow-sm flex items-center gap-3 focus-within:ring-1 focus-within:ring-orange-500 transition-shadow">
               <svg className="w-5 h-5 text-stone-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -91,7 +91,7 @@ export default function Home() {
 
             {/* ACHATS EN COURS */}
             <div>
-              <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 flex items-center gap-3">
                 Vos Achats en Cours
                 <span className="bg-orange-900/50 text-orange-400 text-xs px-2 py-1 rounded-full font-medium">
                   {activePurchases.length}
