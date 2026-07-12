@@ -7,9 +7,15 @@ console.log('SMTP_PASSWORD loaded?', !!process.env.SMTP_PASSWORD);
 console.log('---------------------------');
 
 export const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.SMTP_EMAIL,
     pass: process.env.SMTP_PASSWORD,
   },
-});
+  tls: {
+    rejectUnauthorized: false
+  },
+  family: 4
+} as any);
