@@ -1,4 +1,4 @@
-import { transporter } from '../config/mailer';
+import { getTransporter } from '../config/mailer';
 
 export const sendEmail = async (to: string, subject: string, text: string, html?: string) => {
   const mailOptions = {
@@ -8,5 +8,6 @@ export const sendEmail = async (to: string, subject: string, text: string, html?
     text,
     html,
   };
+  const transporter = await getTransporter();
   return await transporter.sendMail(mailOptions);
 };
