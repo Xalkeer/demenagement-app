@@ -10,6 +10,7 @@ export const Navigation = () => {
     { href: "/", label: "Tableau de Bord", icon: "📊" },
     { href: "/calendar", label: "Calendrier", icon: "📅" },
     { href: "/lists", label: "Listes", icon: "📝" },
+    { href: "/battlepass", label: "Récompenses", icon: "🎁" },
   ];
 
   return (

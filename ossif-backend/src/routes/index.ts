@@ -11,6 +11,11 @@ router.use('/lists', listsRoutes);
 router.use('/tasks', tasksRoutes);
 router.use('/purchases', purchasesRoutes);
 router.use('/notifications', notificationsRoutes);
+import battlepassRoutes from './battlepass.routes';
+import inappNotificationsRoutes from './inapp-notifications.routes';
+
+router.use('/battlepass', battlepassRoutes);
+router.use('/inapp-notifications', inappNotificationsRoutes);
 
 // Import is technically related to purchases
 router.post('/import', importPurchases);

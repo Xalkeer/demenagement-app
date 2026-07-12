@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { NotificationManager } from "./NotificationManager";
 
 export const Header = ({ onExport, onImport }: { onExport: () => void, onImport: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {
   return (
@@ -29,7 +28,6 @@ export const Header = ({ onExport, onImport }: { onExport: () => void, onImport:
           </div>
           <span className="font-bold text-lg tracking-tight">Achats</span>
         </Link>
-        <NotificationManager />
       </div>
     </header>
   );
