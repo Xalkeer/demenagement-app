@@ -33,7 +33,14 @@ export default function RootLayout({
       lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <main className="flex-1">
+          {children}
+        </main>
+        <footer className="py-4 text-center text-sm text-gray-500 mt-auto border-t">
+          Version 1.0
+        </footer>
+      </body>
     </html>
   );
 }
