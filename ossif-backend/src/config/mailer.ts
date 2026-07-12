@@ -21,8 +21,8 @@ export const getTransporter = async () => {
 
   return nodemailer.createTransport({
     host: ip,
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false, // true pour 465, false pour 587
     auth: {
       user: process.env.SMTP_EMAIL,
       pass: process.env.SMTP_PASSWORD,
