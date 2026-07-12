@@ -11,23 +11,27 @@ const checkAndSendEmail = async (purchase: any) => {
   };
 
   logMsg(`\n[EMAIL DEBUG] Début de la vérification pour l'achat "${purchase.name}"`);
-  
+
   if (purchase.termEmailSent) {
     logMsg(`[EMAIL DEBUG] ❌ Le mail a déjà été envoyé pour cet achat (termEmailSent=true).`);
     return purchase;
   }
-  
+
   const { monthsRemaining } = calculateRemaining(purchase);
   logMsg(`[EMAIL DEBUG] Mois restants calculés : ${monthsRemaining}`);
-  
+
   if (monthsRemaining <= 0) {
     logMsg(`[EMAIL DEBUG] ✅ L'achat est terminé (monthsRemaining <= 0). Déclenchement de l'envoi du mail en arrière-plan...`);
     const emailTo = process.env.SMTP_TO_EMAILS || process.env.SMTP_EMAIL || '';
     logMsg(`[EMAIL DEBUG] Destinataire(s) du mail : ${emailTo}`);
-    
+    logMsg(`[EMAIL DEBUG] process.env.SMTP_PASSWORD: ${process.env.SMTP_PASSWORD}`);
+    logMsg(`[EMAIL DEBUG] process.env.SMTP_TO_EMAILS: ${process.env.SMTP_TO_EMAILS}`);
+    logMsg(`[EMAIL DEBUG] process.env.SMTP_EMAIL: ${process.env.SMTP_EMAIL}`);
+    logMsg(`[EMAIL DEBUG] process.env.SMTP_PASSWORD loaded? ${!!process.env.SMTP_PASSWORD}`);
+
     // Marquer l'email comme envoyé en base immédiatement pour éviter les doublons
     const updatedPurchase = await purchasesService.markPurchaseTermEmailSent(purchase.id);
-    
+
     // Envoyer l'email de manière asynchrone (sans bloquer la réponse HTTP)
     sendEmail(
       emailTo,
@@ -38,12 +42,12 @@ const checkAndSendEmail = async (purchase: any) => {
     }).catch((err) => {
       logMsg(`[EMAIL DEBUG] 🚨 ERREUR lors de l'envoi de l'email pour "${purchase.name}": ${err}`);
     });
-    
+
     return updatedPurchase;
   } else {
     logMsg(`[EMAIL DEBUG] ❌ L'achat n'est pas encore terminé (il reste ${monthsRemaining} mois).`);
   }
-  
+
   logMsg(`[EMAIL DEBUG] Fin de la vérification.\n`);
   return purchase;
 };
@@ -63,7 +67,7 @@ export const createPurchase = async (req: Request, res: Response) => {
     if (data.date) data.date = new Date(data.date);
     if (data.expectedReceptionDate) data.expectedReceptionDate = new Date(data.expectedReceptionDate);
     if (data.reimbursementStartDate) data.reimbursementStartDate = new Date(data.reimbursementStartDate);
-    
+
     let purchase = await purchasesService.createPurchase(data);
     purchase = await checkAndSendEmail(purchase);
     res.json(purchase);
@@ -80,7 +84,7 @@ export const updatePurchase = async (req: Request, res: Response) => {
     if (data.date) data.date = new Date(data.date);
     if (data.expectedReceptionDate) data.expectedReceptionDate = new Date(data.expectedReceptionDate);
     if (data.reimbursementStartDate) data.reimbursementStartDate = new Date(data.reimbursementStartDate);
-    
+
     let purchase = await purchasesService.updatePurchase(Number(req.params.id), data);
     purchase = await checkAndSendEmail(purchase);
     res.json(purchase);
