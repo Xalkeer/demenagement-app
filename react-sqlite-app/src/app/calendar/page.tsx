@@ -49,6 +49,7 @@ export default function CalendarPage() {
         isOpen={!!editingTask}
         onClose={() => setEditingTask(null)}
         onSave={updateTask}
+        onDelete={deleteTask}
         lists={lists}
       />
     </main>

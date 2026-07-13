@@ -33,20 +33,30 @@ export function useTasks() {
   const updateTask = async (id: number, data: Partial<Task>) => {
     try {
       await taskService.update(id, data);
-      setTasks(prev => prev.map(t => t.id === id ? { ...t, ...data } : t));
+      if (data.updateMode && data.updateMode !== 'single') {
+        // Rafraîchir toutes les tâches si on a modifié plusieurs occurrences
+        fetchTasks();
+      } else {
+        setTasks(prev => prev.map(t => t.id === id ? { ...t, ...data } : t));
+      }
     } catch (error) {
       console.error(error);
       fetchTasks();
     }
   };
 
-  const deleteTask = async (id: number) => {
-    if (!confirm("Voulez-vous vraiment supprimer cette tâche ?")) return;
+  const deleteTask = async (id: number, mode?: string) => {
+    if (!mode && !confirm("Voulez-vous vraiment supprimer cette tâche ?")) return;
     try {
-      await taskService.delete(id);
-      setTasks((prev) => prev.filter((t) => t.id !== id));
+      await taskService.delete(id, mode);
+      if (mode && mode !== 'single') {
+        fetchTasks();
+      } else {
+        setTasks((prev) => prev.filter((t) => t.id !== id));
+      }
     } catch (error) {
       console.error(error);
+      fetchTasks();
     }
   };
 

@@ -6,6 +6,7 @@ import { useLists } from "../../hooks/useLists";
 import { useTasks } from "../../hooks/useTasks";
 import { TaskList, Task } from "../../types/task";
 import { TaskModal } from "../../components/TaskModal";
+import { CreateTaskModal } from "../../components/CreateTaskModal";
 
 export default function ListsPage() {
   const { lists, loadingLists, addList, deleteList } = useLists();
@@ -18,6 +19,7 @@ export default function ListsPage() {
   const [newTaskPriority, setNewTaskPriority] = useState<'normal' | 'urgent' | 'super-urgent'>('normal');
   const [newTaskTargetList, setNewTaskTargetList] = useState<number | "none">("none");
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // Automatically select the first list once loaded
   if (selectedListId === "loading" && lists.length > 0) {
@@ -44,19 +46,8 @@ export default function ListsPage() {
     if (created) setSelectedListId(created.id);
   };
 
-  const handleCreateTask = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTaskTitle.trim() || !newTaskDate) return;
-    await addTask({
-      title: newTaskTitle.trim(),
-      date: new Date(newTaskDate).toISOString(),
-      listId: newTaskTargetList === "none" ? null : newTaskTargetList,
-      priority: newTaskPriority,
-      isCompleted: false,
-    });
-    setNewTaskTitle("");
-    setNewTaskDate(new Date().toISOString().split('T')[0]);
-    setNewTaskPriority("normal");
+  const handleCreateTask = async (data: any) => {
+    await addTask(data);
   };
 
   const getColorClass = (color: string) => {
@@ -161,72 +152,42 @@ export default function ListsPage() {
               </div>
             </div>
 
-            {/* Colonne droite : Contenu de la liste */}
+            {/* Box d'affichage de la liste sélectionnée */}
             <div className="lg:col-span-3 space-y-6">
               
-              {/* Box de création globale de tâche */}
-              <div className="bg-[#23201f] border border-stone-800 rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-xl">
-                <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Créer une nouvelle tâche</h3>
-                <form onSubmit={handleCreateTask} className="flex flex-wrap gap-3">
-                  <input
-                    type="text"
-                    placeholder="Titre de la tâche..."
-                    value={newTaskTitle}
-                    onChange={e => setNewTaskTitle(e.target.value)}
-                    className="flex-1 min-w-[200px] bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all"
-                  />
-                  <input
-                    type="date"
-                    value={newTaskDate}
-                    onChange={e => setNewTaskDate(e.target.value)}
-                    className="bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm text-stone-300 outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all [color-scheme:dark]"
-                  />
-                  <select
-                    value={newTaskTargetList}
-                    onChange={e => setNewTaskTargetList(e.target.value === "none" ? "none" : parseInt(e.target.value, 10))}
-                    className="bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm text-stone-300 outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all cursor-pointer"
-                  >
-                    <option value="none">Général (Sans liste)</option>
-                    {lists.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
-                  </select>
-                  <select
-                    value={newTaskPriority}
-                    onChange={e => setNewTaskPriority(e.target.value as any)}
-                    className="bg-[#181615] border border-stone-800 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm text-stone-300 outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all cursor-pointer"
-                  >
-                    <option value="normal">Normal</option>
-                    <option value="urgent">Urgent</option>
-                    <option value="super-urgent">Super Urgent</option>
-                  </select>
-                  <button 
-                    type="submit"
-                    disabled={!newTaskTitle.trim() || !newTaskDate}
-                    className="bg-orange-600 hover:bg-orange-500 disabled:opacity-50 disabled:hover:bg-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium transition-colors"
-                  >
-                    Ajouter
-                  </button>
-                </form>
-              </div>
-
-              {/* Box d'affichage de la liste sélectionnée */}
               <div className="bg-[#23201f] border border-stone-800 rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-xl min-h-[400px] flex flex-col">
-                <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-stone-800">
-                  {selectedListId === "today" ? (
-                    <>
-                      <span className="w-4 h-4 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]"></span>
-                      <h2 className="text-xl sm:text-2xl font-bold">Aujourd'hui</h2>
-                    </>
-                  ) : selectedListId === null ? (
-                    <>
-                      <span className="w-4 h-4 rounded-full bg-stone-500"></span>
-                      <h2 className="text-xl sm:text-2xl font-bold">Général (Sans liste)</h2>
-                    </>
-                  ) : (
-                    <>
-                      <span className={`w-4 h-4 rounded-full ${getColorClass(selectedList?.color || 'stone').split(' ')[0]}`}></span>
-                      <h2 className="text-xl sm:text-2xl font-bold">{selectedList?.name}</h2>
-                    </>
-                  )}
+                <div className="flex items-center justify-between mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-stone-800">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    {selectedListId === "today" ? (
+                      <>
+                        <span className="w-4 h-4 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]"></span>
+                        <h2 className="text-xl sm:text-2xl font-bold">Aujourd'hui</h2>
+                      </>
+                    ) : selectedListId === null ? (
+                      <>
+                        <span className="w-4 h-4 rounded-full bg-stone-500"></span>
+                        <h2 className="text-xl sm:text-2xl font-bold">Général (Sans liste)</h2>
+                      </>
+                    ) : (
+                      <>
+                        <span className={`w-4 h-4 rounded-full ${getColorClass(selectedList?.color || 'stone').split(' ')[0]}`}></span>
+                        <h2 className="text-xl sm:text-2xl font-bold">{selectedList?.name}</h2>
+                      </>
+                    )}
+                  </div>
+                  
+                  <button
+                    onClick={() => {
+                      setNewTaskTargetList(selectedListId === "today" || selectedListId === null || selectedListId === "loading" ? "none" : selectedListId);
+                      setIsCreateModalOpen(true);
+                    }}
+                    className="bg-orange-600 hover:bg-orange-500 text-white px-4 sm:px-6 py-2 rounded-xl font-medium transition-colors flex items-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Nouvelle tâche
+                  </button>
                 </div>
 
                 <div className="flex-1 space-y-3">
@@ -287,7 +248,15 @@ export default function ListsPage() {
         isOpen={!!editingTask}
         onClose={() => setEditingTask(null)}
         onSave={updateTask}
+        onDelete={deleteTask}
         lists={lists}
+      />
+      <CreateTaskModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSave={handleCreateTask}
+        lists={lists}
+        defaultListId={newTaskTargetList}
       />
     </main>
   );

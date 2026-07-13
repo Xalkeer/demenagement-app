@@ -18,6 +18,9 @@ export type Task = {
   description?: string | null;
   location?: string | null;
   assignee?: string | null;
+  recurrence?: string;
+  recurrenceId?: string | null;
+  updateMode?: 'single' | 'future' | 'all';
   createdAt?: string;
   updatedAt?: string;
 };

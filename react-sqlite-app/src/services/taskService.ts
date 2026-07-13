@@ -28,8 +28,9 @@ export const taskService = {
     if (!res.ok) throw new Error("Erreur lors de la mise à jour");
   },
 
-  async delete(id: number): Promise<void> {
-    const res = await fetch(`${API_URL}/tasks/${id}`, {
+  async delete(id: number, mode?: string): Promise<void> {
+    const url = mode ? `${API_URL}/tasks/${id}?mode=${mode}` : `${API_URL}/tasks/${id}`;
+    const res = await fetch(url, {
       method: "DELETE",
     });
     if (!res.ok) throw new Error("Erreur lors de la suppression");
